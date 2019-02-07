@@ -1,4 +1,5 @@
 // FUNCTIONS DECLARATIONS
+
 const netxPlayer = () => {
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0
     roundScore = 0
@@ -16,7 +17,8 @@ const initGame = () => {
     scores = [0, 0]
     activePlayer = 0
     roundScore = 0
-    gamePlaying = true   
+    gamePlaying = true
+    winningScore = 0    
 
     document.querySelector('.dice').style.display = 'none'
 
@@ -32,28 +34,48 @@ const initGame = () => {
     document.querySelector('.player-1-panel').classList.remove('active')
     document.querySelector('.player-0-panel').classList.add('active')
 }
-
-// GAME LOGIC
-
 initGame()
 
-document.querySelector('.btn-roll').addEventListener('click', (e) => {
+const rollDice = () => {
+    let dice
+    
     if (gamePlaying) {
         //  Get random number from 1 to 6 for the dice
-        const dice = Math.floor(Math.random() * 6) + 1
-
+        dice = Math.floor(Math.random() * 6) + 1
         //  Display results in the browser
         const diceDOM = document.querySelector('.dice') 
         diceDOM.style.display = 'block' 
         diceDOM.src = 'dice-' + dice + '.png'
 
-        // Update the score only IF the score was not 1
-        if (dice !== 1) { //  Add score
+         if (dice !== 1) { //  Add score
             roundScore += dice //update round score
             document.querySelector('#current-' + activePlayer).textContent = roundScore // display round score
         } else { // Next player
             netxPlayer()
         }
+    }
+    return dice
+}
+// GAME LOGIC
+let numbers = []    // global variable
+
+document.querySelector('.btn-roll').addEventListener('click', (e) => {
+    const dice = rollDice()
+    numbers.push(dice)
+
+    const secondLastEl = numbers[numbers.length - 2]
+    const lastEl = numbers[numbers.length - 1]
+    console.log(numbers) 
+    // numbers array which we have access to because it is global
+    if (secondLastEl === 6 && lastEl === 6) {
+        console.log('yay') // everything works sign :)
+
+        // setting player general score to 0
+        document.getElementById(`score-${activePlayer}`).textContent = '0'
+        
+        // clear array for next player
+        numbers.splice(0, numbers.length) 
+        netxPlayer()
     }
 })
 
