@@ -11,6 +11,7 @@ const netxPlayer = () => {
     // toggle add class if it is not there and then if it is there it is going to remove thtah class
 
     document.querySelector('.dice').style.display = 'none'
+    document.querySelector('.dice_2').style.display = 'none'
 }
 
 const initGame = () => {
@@ -20,6 +21,7 @@ const initGame = () => {
     gamePlaying = true
 
     document.querySelector('.dice').style.display = 'none'
+    document.querySelector('.dice_2').style.display = 'none'
 
     document.getElementById('score-0').textContent = '0'
     document.getElementById('score-1').textContent = '0'
@@ -37,21 +39,30 @@ const initGame = () => {
 initGame()
 
 const rollDice = () => {
-    let dice
+    let dices = []
     if (gamePlaying) {
-        //  Get random number from 1 to 6 for the dice
+        //  Get random number from 1 to 6 for the dices
         dice = Math.floor(Math.random() * 6) + 1
+        dice_2 = Math.floor(Math.random() * 6) + 1
+        dices.push(dice, dice_2)
+        
         //  Display results in the browser
         const diceDOM = document.querySelector('.dice') 
+        const diceDOM_2 = document.querySelector('.dice_2')
+        
         diceDOM.style.display = 'block' 
         diceDOM.src = 'dice-' + dice + '.png'
 
-         if (dice !== 1) { //  Add score
-            roundScore += dice //update round score
+        diceDOM_2.style.display = 'block'
+        diceDOM_2.src = 'dice-' + dice_2 + '.png'
+
+         if (dice !== 1 && dice_2 !== 1) { //  Add score
+            const dicesScore = dice + dice_2
+            roundScore += dicesScore 
             document.querySelector('#current-' + activePlayer).textContent = roundScore // display round score
         } else { // Next player
             netxPlayer()
         }
     }
-    return dice
+    return dices
 }
